@@ -1,5 +1,7 @@
 # AirTravelCarbonCalculator
-Calculates carbon emissions of flying commercially
+Blue Marble Space is committed to a sustainable future. See our [Code of Ethics](https://www.bluemarblespace.org/ethics.html).
+
+This code calculates carbon emissions of flying commercially.
 
 # Notes on construction:
 - Dependency TL;DR: pandas, numpy, pycountry, geopy, pycountry-convert.
@@ -25,6 +27,8 @@ Calculates carbon emissions of flying commercially
 
   # Notes on implementation:
  - Can be used as standalone code (verbose) or imported into another (non-verbose) with, for example: 
+   '''
    import AirTravelCarbonCalculator as ATC
    kg_carbon = ATC.get_airtravelcarbon(city_of_departure, city_of_layover, city_of_destination)
+   '''
    
