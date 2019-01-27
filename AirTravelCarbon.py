@@ -24,6 +24,7 @@
 #
 #   Sanjoy Som  -January 2019
 ########################################################################
+import os
 import sys
 import pycountry
 import numpy as np
@@ -126,10 +127,16 @@ def get_aircraftdata(distance,ft,verbose=False):
        print 'Fuel consumption of aircraft: ' + '%.0f'%tf + ' tons'
     return tf, nys
 
+def get_filepath():
+    from os import path
+    filepath   = os.path.dirname(os.path.abspath(__file__))+'/'
+    return filepath
+
 def get_table(filename):
-	data = pd.read_csv(filename,delimiter=',')
-        df = pd.DataFrame(data)
-	return df
+    filepath   = get_filepath()
+    data = pd.read_csv(filepath+filename,delimiter=',')
+    df = pd.DataFrame(data)
+    return df
 
 def get_flightvalues(distance,ft,ct1,ct2, verbose = False):
     #tC   = number of tons of CO2 producing by burning 1 ton of fuel
