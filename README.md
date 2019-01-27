@@ -27,8 +27,8 @@ This code calculates carbon emissions of flying commercially.
 
   # Notes on implementation:
  - Can be used as standalone code (verbose) or imported into another (non-verbose) with, for example: 
-   '''
+   ```
    import AirTravelCarbonCalculator as ATC
    kg_carbon = ATC.get_airtravelcarbon(city_of_departure, city_of_layover, city_of_destination)
-   '''
+   ```
    
