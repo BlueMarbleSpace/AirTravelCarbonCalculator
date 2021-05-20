@@ -32,6 +32,11 @@ import pandas as pd
 ########################################################################
 # Functions called by main program
 ########################################################################
+def check_python3()
+    #makes sure code is called with python3
+    if sys.version_info[0] < 3:
+      print("Python3 is required to run this code.");sys.exit()
+
 def get_continent(country):
     from pycountry_convert import \
 	country_name_to_country_alpha2 as cn2a2
@@ -55,7 +60,7 @@ def get_coordinates(city):
     geolocator  = Nominatim(user_agent="AirTravelCarbon")
     location    = geolocator.geocode(city, language='en')
     if location == None:
-        print 'Error: city ' + city + ' was not found.'
+        print('Error: city ' + city + ' was not found.')
         sys.exit()
     coordinates = [location.latitude, location.longitude]
     country     = location.address.split()[-1]
@@ -66,14 +71,14 @@ def get_greatcircle(city1, city2, verbose = False):
     from geopy.distance import great_circle
     distance = great_circle(city1,city2).km
     if verbose:
-        print 'Distance of travel: ' + '%.0f'%distance + ' km'
+        print('Distance of travel: ' + '%.0f'%distance + ' km')
     return distance
 
 def get_aircraftdata(distance,ft,verbose=False):
     if ft == 'Short Haul':
        #Assumptions for Medium Haul:
        if verbose:
-          print 'Aircraft: CRJ 700'
+          print('Aircraft: CRJ 700')
        #aircraft data: https://www.united.com/web/en-US/content/travel/
        #               inflight/aircraft/crj/700/default.aspx
        #Seats: 6 (First), 64 (economy). 6 First = 12 economy equival.
@@ -90,7 +95,7 @@ def get_aircraftdata(distance,ft,verbose=False):
     if ft == 'Medium Haul':
        #Assumptions for Medium Haul:
        if verbose:
-          print 'Aircraft: Airbus A320'
+          print('Aircraft: Airbus A320')
        #aircraft data: https://www.united.com/web/en-US/content/travel/
        #               inflight/aircraft/airbus320/default.aspx
        #Seats: 12 (First), 138 (economy). 12 First = 18 economy equival.
@@ -107,7 +112,7 @@ def get_aircraftdata(distance,ft,verbose=False):
     elif ft == 'Long Haul':
        #Assumptions for Long Haul:
        if verbose:
-          print 'Aircraft: Boeing 777-300ER'
+          print('Aircraft: Boeing 777-300ER')
        #aircraft data: https://www.united.com/web/en-US/content/travel/
        #               inflight/aircraft/777/300/default.aspx
        #Seats: 60 (Business), 24 (premium). 266 (economy)
@@ -124,7 +129,7 @@ def get_aircraftdata(distance,ft,verbose=False):
        tf = tf * distance       #kg of fuel
        tf = tf / 1000.          #tons of fuel
     if verbose:
-       print 'Fuel consumption of aircraft: ' + '%.0f'%tf + ' tons'
+       print('Fuel consumption of aircraft: ' + '%.0f'%tf + ' tons')
     return tf, nys
 
 def get_filepath():
@@ -165,7 +170,7 @@ def get_icaocarbon(distance, ct1, ct2, verbose=False): #from p.8 of ICAO pdf
        distance = distance + 125.
        ft = 'Long Haul'
     if verbose:
-       print 'Identified flight type: ' + ft
+       print('Identified flight type: ' + ft)
     tC, tf, ptff, nys, plf = get_flightvalues(distance,ft,ct1,ct2, verbose)
     #Now we have all the information to calculate C emmited, based on
     #ICAO equation p.6 of pdf.
@@ -191,13 +196,13 @@ def get_journeycarbon(cities, verbose=False):
 
     for i in range(nof):
         if verbose:
-           print cities[i] + ' ('+country[i]+')'+ ' to'
-           print cities[i+1] + ' ('+country[i+1]+')'  
+           print(cities[i] + ' ('+country[i]+')'+ ' to')
+           print(cities[i+1] + ' ('+country[i+1]+')')  
         distance[i] = get_greatcircle(coords[i],coords[i+1], verbose)
         carbon[i]  = get_icaocarbon(distance[i],continent[i], continent[i+1], verbose)
         if (nof > 1) and verbose:
-            print 'Carbon cost of leg: ' + '%.0f'%carbon[i] +' kg'
-            print '-'*40
+            print('Carbon cost of leg: ' + '%.0f'%carbon[i] +' kg')
+            print('-'*40)
     return carbon
 
 def get_airtravelcarbon(city_departure, city_layover, city_arrival, verbose=False):
@@ -210,15 +215,16 @@ def get_airtravelcarbon(city_departure, city_layover, city_arrival, verbose=Fals
 
 	carbon = get_journeycarbon(cities, verbose)
 	if verbose:
-	    print 'Total Carbon cost of journey: ' + '%.0f'%np.sum(carbon) +' kg'
+	    print('Total Carbon cost of journey: ' + '%.0f'%np.sum(carbon) +' kg')
 	return carbon
 ########################################################################
 # Main program
 ########################################################################
 if __name__ == "__main__":
-        verbose = True
-	city_departure = raw_input('City of Departure: ')
-	city_layover   = raw_input('City of Layover: ')
-	city_arrival   = raw_input('City of Arrival: ')
-        print '-'*40
-	carbon = get_airtravelcarbon(city_departure, city_layover, city_arrival, verbose)
+  verbose = True
+  check_python3()
+  city_departure = input('City of Departure: ')
+  city_layover   = input('City of Layover: ')
+  city_arrival   = input('City of Arrival: ')
+  print('-'*40)
+  carbon = get_airtravelcarbon(city_departure, city_layover, city_arrival, verbose)
