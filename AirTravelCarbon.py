@@ -32,7 +32,7 @@ import pandas as pd
 ########################################################################
 # Functions called by main program
 ########################################################################
-def check_python3()
+def check_python3():
     #makes sure code is called with python3
     if sys.version_info[0] < 3:
       print("Python3 is required to run this code.");sys.exit()
